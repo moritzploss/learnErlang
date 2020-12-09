@@ -1,4 +1,5 @@
 -module(client).
+
 -export([ls/1, get_file/2, put_file/3]).
 
 ls(Server) ->
@@ -21,3 +22,4 @@ put_file(Server, Content, FileName) ->
     {Server, ok} ->
       ok
   end.
+
