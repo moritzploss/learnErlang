@@ -1,8 +1,12 @@
 -module(event).
 
--export([start/2, start_link/2, cancel/1]).
+-export([start/2, start_link/2, cancel/1, init/3]).
 
--record(state, {server :: pid(), name :: string(), delay = [0] :: [integer()]}).
+-record(state, {
+  server :: pid(),
+  name :: string(),
+  delay = [0] :: [integer()]
+}).
 
 start(Name, Delay) ->
   spawn(?MODULE, init, [self(), Name, Delay]).
@@ -25,19 +29,19 @@ init(Server, Name, Delay) ->
   loop(#state{server = Server, name = Name, delay = split_delay(Delay)}).
 
 split_delay(Delay) ->
-  Limit = 49 * 24 * 3600,
+  Limit = 49 * 24 * 3600 * 1000,
   [Delay rem Limit | lists:duplicate(Delay div Limit, Limit)].
 
-loop(State = #state{server = Server, delay = [Current | Next]}) ->
+loop(State = #state{server = Server, delay = [CurrentDelay | Remaining]}) ->
   receive
     {Server, Ref, cancel} ->
       Server ! {Ref, ok}
-    after Current ->
-            case Next of
-              [] ->
-                Server ! {done, State#state.name};
-              _ ->
-                loop(State#state{delay = Next})
-            end
+    after CurrentDelay ->
+      case Remaining of
+        [] ->
+          Server ! {done, State#state.name};
+        [_ | _] ->
+          loop(State#state{delay = Remaining})
+      end
   end.
 
