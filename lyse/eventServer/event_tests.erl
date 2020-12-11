@@ -8,7 +8,9 @@ event_test_() ->
     {"'Done' is triggered after delay",
     event_done()},
     {"'Done' is triggered with correct event name",
-    event_name()}].
+    event_name()},
+    {"Event can be canceled",
+    event_cancel()}].
 
 event_init() ->
   Pid = event:start("Test", 100),
@@ -34,3 +36,9 @@ event_name() ->
       error("Did not receive 'Done' for event with name " ++ Name)
   end.
 
+event_cancel() ->
+  Pid = event:start("Test", 10 * 1000),
+  ?_assert(erlang:is_process_alive(Pid)),
+
+  ok = event:cancel(Pid),
+  ?_assert(not erlang:is_process_alive(Pid)).
