@@ -2,22 +2,35 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
-event_test_() -> [
-  ?_assert(event_init()),
-  ?_assert(event_done())
-].
+event_test_() ->
+  [{"Event can be initialized",
+    event_init()},
+    {"'Done' is triggered after delay",
+    event_done()},
+    {"'Done' is triggered with correct event name",
+    event_name()}].
 
 event_init() ->
-  event:start("Test", 0),
-  true.
+  Pid = event:start("Test", 100),
+  ?_assert(erlang:is_process_alive(Pid)),
+  ?_assert(exit(Pid, kill)).
 
 event_done() ->
+  Pid = event:start("Test", 0),
+  receive
+    {done, _Name} ->
+      ?_assert(exit(Pid, kill))
+    after 1000 ->
+      error("Did not receive 'Done'")
+  end.
+
+event_name() ->
   Name = "Test",
-  event:start(Name, 0),
+  Pid = event:start(Name, 0),
   receive
     {done, Name} ->
-      true
-    after 1000 ->
-      false
+      ?_assert(exit(Pid, kill))
+    after 100 ->
+      error("Did not receive 'Done' for event with name " ++ Name)
   end.
 
