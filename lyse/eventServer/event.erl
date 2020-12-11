@@ -1,6 +1,7 @@
 -module(event).
 
--export([start/2, start_link/2, cancel/1, init/3]).
+-export([start/2, start_link/2, cancel/1]).
+-export([init/3]).
 
 -record(state, {
   server :: pid(),
