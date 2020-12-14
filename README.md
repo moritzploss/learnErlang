@@ -31,3 +31,9 @@ project in an Erlang shell, run:
 Or start an Erlang shell and call (also to recompile while in shell):
 
     make:all([load]).
+
+## Dialyzer
+
+Run the Dialyzer on a all files in a `src` directory:
+
+    dialyzer ./src --src -r

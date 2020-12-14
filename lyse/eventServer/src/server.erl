@@ -13,6 +13,8 @@
 
 -type monitor_ref() :: any().
 
+-type orddict(Key, Value) :: orddict(Key, Value).
+
 -record(event, {
   owner :: pid(),
   name :: name(),
@@ -20,8 +22,8 @@
 }).
 
 -record(state, {
-  clients = orddict:new() :: erlang:orddict(monitor_ref(), pid()),
-  events = orddict:new() :: erlang:orddict(name(), event())
+  clients = orddict:new() :: orddict(monitor_ref(), pid()),
+  events = orddict:new() :: orddict(name(), event())
 }).
 
 start() ->
