@@ -1,6 +1,7 @@
 -module(server).
 
--export([start/1, loop/1]).
+-export([start/1]).
+-export([loop/1]).
 
 start(Dir) ->
   spawn(server, loop, [Dir]).

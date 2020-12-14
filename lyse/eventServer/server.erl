@@ -3,9 +3,25 @@
 -export([start/0, start_link/0, stop/1]).
 -export([init/1]).
 
+-type event() :: {
+  owner, pid(),
+  name, string(), 
+  pid, pid()
+}.
+
+-type name() :: string().
+
+-type monitor_ref() :: any().
+
+-record(event, {
+  owner :: pid(),
+  name :: name(),
+  pid :: pid()
+}).
+
 -record(state, {
-  clients = orddict:new() :: erlang:orddict(any(), pid()),
-  events = orddict:new() :: erlang:orddict(string(), pid())
+  clients = orddict:new() :: erlang:orddict(monitor_ref(), pid()),
+  events = orddict:new() :: erlang:orddict(name(), event())
 }).
 
 start() ->
@@ -20,7 +36,7 @@ stop(Pid) ->
 init(State = #state{}) ->
   loop(State).
 
-loop(State) ->
+loop(State = #state{}) ->
   receive
     {Client, MsgRef, {subscribe}} ->
       Ref = erlang:monitor(process, Client),
@@ -30,13 +46,14 @@ loop(State) ->
 
     {Client, MsgRef, {add, Name, Delay}} ->
       EventPid = event:start_link(Name, Delay),
-      Events = orddict:store(Name, EventPid, State#state.events),
+      Event = #event{owner = Client, name = Name, pid = EventPid},
+      Events = orddict:store(Name, Event, State#state.events),
       Client ! {MsgRef, ok},
       loop(State#state{events = Events});
 
     {Client, MsgRef, {cancel, Name}} ->
       case orddict:find(Name, State#state.events) of
-        {ok, EventPid} ->
+        {ok, #event{pid = EventPid}} ->
           ok = event:cancel(EventPid),
           Events = orddict:erase(Name, State#state.events),
           Client ! { MsgRef, ok},
@@ -45,6 +62,12 @@ loop(State) ->
           Client ! {MsgRef, {error, not_found}},
           loop(State)
       end;
+
+    {done, Name} ->
+      #event{owner = OwnerPid} = orddict:fetch(Name, State#state.events),
+      OwnerPid ! {done, Name},
+      Events = orddict:erase(Name, State#state.events),
+      loop(State#state{events = Events});
 
     shutdown ->
         ok;
