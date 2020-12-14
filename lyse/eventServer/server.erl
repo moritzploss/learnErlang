@@ -1,6 +1,6 @@
 -module(server).
 
--export([start/0, start_link/0, stop/1]).
+-export([start/0, start_link/0, stop/1, add_event/3, subscribe/1]).
 -export([init/1]).
 
 -type event() :: {
@@ -32,6 +32,28 @@ start_link() ->
 
 stop(Pid) ->
   Pid ! shutdown.
+
+subscribe(Pid) ->
+  Ref = erlang:monitor(process, whereis(?MODULE)),
+  Pid ! {self(), Ref, {subscribe}},
+  receive
+    {Ref, ok} ->
+      {ok, Ref};
+    {'DOWN', Ref, process, _Pid, Reason} ->
+      {error, Reason}
+  after 5000 ->
+    {error, timeout}
+  end.
+
+add_event(Pid, Name, Delay) ->
+  Ref = make_ref(),
+  Pid ! {self(), Ref, {add, Name, Delay}},
+  receive
+    {Ref, ok} ->
+      ok
+  after 5000 ->
+    {error, timeout}
+  end.
 
 init(State = #state{}) ->
   loop(State).
