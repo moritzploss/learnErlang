@@ -27,3 +27,7 @@ This will produce `.beam` files in the `ebin` directory. To load the
 project in an Erlang shell, run:
 
     erl -pa ebin/
+
+Or start an Erlang shell and call (also to recompile while in shell):
+
+    make:all([load]).
