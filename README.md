@@ -38,6 +38,6 @@ Or start an Erlang shell and call (also to recompile while in shell):
 
 ## Dialyzer
 
-Run the Dialyzer on a all files in the `src` directory:
+Run the Dialyzer on all files in the `src` directory:
 
     dialyzer ./src --src -r

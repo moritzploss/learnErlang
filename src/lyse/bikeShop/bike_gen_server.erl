@@ -2,9 +2,22 @@
 
 -behaviour(gen_server).
 
--export([init/1, start_link/0]).
--export([handle_call/3, handle_cast/2, terminate/2, handle_info/2, code_change/3]).
--export([order_bike/3, return_bike/2, get_bikes/1, close_shop/1]).
+-export([
+    start_link/0,
+    order_bike/3,
+    return_bike/2,
+    get_bikes/1,
+    close_shop/1
+]).
+
+-export([
+    init/1,
+    handle_call/3,
+    handle_cast/2,
+    terminate/2,
+    handle_info/2,
+    code_change/3
+]).
 
 -record(bike, {
     model :: string(),
@@ -12,9 +25,6 @@
 }).
 
 %% external API
-
-init([]) ->
-    {ok, []}.
 
 start_link() ->
     gen_server:start_link(?MODULE, [], []).
@@ -32,6 +42,9 @@ close_shop(Pid) ->
     gen_server:call(Pid, terminate).
 
 %% internal callbacks
+
+init([]) ->
+    {ok, []}.
 
 handle_call({order, Model, Manufacturer}, _From, Bikes) ->
     Bike = #bike{model = Model, manufacturer = Manufacturer},
