@@ -12,9 +12,7 @@ Install erlang:
 
 Build a local `plt` file for Dialyzer support in VS Code with Erlang LS. Make
 sure the `plt_path` in [erlang_ls.config](./erlang_ls.config) points to the
-`output_plt` file:
-
-    dialyzer --build_plt --apps erts kernel stdlib mnesia --output_plt ./.dialyzer.plt
+`output_plt` file.
 
 ## Build the Project
 
@@ -35,9 +33,3 @@ To load the project in an Erlang shell, run:
 Or start an Erlang shell and call (also to recompile while in shell):
 
     make:all([load]).
-
-## Dialyzer
-
-Run the Dialyzer on all files in the `src` directory:
-
-    dialyzer ./src --src -r
