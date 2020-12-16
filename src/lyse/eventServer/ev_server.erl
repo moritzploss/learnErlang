@@ -1,4 +1,4 @@
--module(server).
+-module(ev_server).
 
 -export([start/0, start_link/0, stop/1, add_event/3, subscribe/1]).
 -export([init/1]).
@@ -65,7 +65,7 @@ loop(State = #state{}) ->
             Client ! {MsgRef, ok},
             loop(State#state{clients = Clients});
         {Client, MsgRef, {add, Name, Delay}} ->
-            EventPid = event:start_link(Name, Delay),
+            EventPid = ev_event:start_link(Name, Delay),
             Event = #event{owner = Client, name = Name, pid = EventPid},
             Events = maps:put(Name, Event, State#state.events),
             Client ! {MsgRef, ok},
@@ -73,7 +73,7 @@ loop(State = #state{}) ->
         {Client, MsgRef, {cancel, Name}} ->
             case maps:find(Name, State#state.events) of
                 {ok, #event{pid = EventPid}} ->
-                    ok = event:cancel(EventPid),
+                    ok = ev_event:cancel(EventPid),
                     Events = map:put(Name, State#state.events),
                     Client ! {MsgRef, ok},
                     loop(State#state{events = Events});

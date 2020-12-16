@@ -1,4 +1,4 @@
--module(event).
+-module(ev_event).
 
 -export([start/2, start_link/2, cancel/1]).
 -export([init/3]).

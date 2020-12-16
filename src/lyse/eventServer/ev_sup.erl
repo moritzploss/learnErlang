@@ -1,4 +1,4 @@
--module(sup).
+-module(ev_sup).
 
 -export([start/2, start_link/2]).
 -export([init/1]).

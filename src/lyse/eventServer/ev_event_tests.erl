@@ -1,4 +1,4 @@
--module(event_tests).
+-module(ev_event_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -11,12 +11,12 @@ event_test_() ->
     ].
 
 event_init() ->
-    Pid = event:start("Test", 100),
+    Pid = ev_event:start("Test", 100),
     ?_assert(erlang:is_process_alive(Pid)),
     ?_assert(exit(Pid, kill)).
 
 event_done() ->
-    Pid = event:start("Test", 0),
+    Pid = ev_event:start("Test", 0),
     receive
         {done, _Name} ->
             ?_assert(exit(Pid, kill))
@@ -25,7 +25,7 @@ event_done() ->
 
 event_name() ->
     Name = "Test",
-    Pid = event:start(Name, 0),
+    Pid = ev_event:start(Name, 0),
     receive
         {done, Name} ->
             ?_assert(exit(Pid, kill))
@@ -33,8 +33,8 @@ event_name() ->
     end.
 
 event_cancel() ->
-    Pid = event:start("Test", 10 * 1000),
+    Pid = ev_event:start("Test", 10 * 1000),
     ?_assert(erlang:is_process_alive(Pid)),
 
-    ok = event:cancel(Pid),
+    ok = ev_event:cancel(Pid),
     ?_assert(not erlang:is_process_alive(Pid)).
