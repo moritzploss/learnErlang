@@ -42,7 +42,6 @@ close_shop(Pid) ->
     gen_server:call(Pid, terminate).
 
 %% internal callbacks
-
 init([]) ->
     {ok, []}.
 
