@@ -7,5 +7,5 @@ event_test_() ->
 
 server_start() ->
     Pid = ev_server:start(),
-    ?_assert(erlang:is_process_alive(Pid)),
+    true = erlang:is_process_alive(Pid),
     ?_assert(exit(Pid, kill)).

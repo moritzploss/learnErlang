@@ -12,7 +12,7 @@ event_test_() ->
 
 event_init() ->
     Pid = ev_event:start("Test", 100),
-    ?_assert(erlang:is_process_alive(Pid)),
+    true = erlang:is_process_alive(Pid),
     ?_assert(exit(Pid, kill)).
 
 event_done() ->
@@ -34,7 +34,7 @@ event_name() ->
 
 event_cancel() ->
     Pid = ev_event:start("Test", 10 * 1000),
-    ?_assert(erlang:is_process_alive(Pid)),
+    true = erlang:is_process_alive(Pid),
 
     ok = ev_event:cancel(Pid),
     ?_assert(not erlang:is_process_alive(Pid)).
