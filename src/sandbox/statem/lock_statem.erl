@@ -14,7 +14,6 @@
 
 -type button() :: term().
 -type code() :: string().
--type state() :: locked | open.
 -type common() :: code_length.
 -type ret(A) :: gen_statem:event_handler_result(A).
 
@@ -38,13 +37,14 @@ code_length() ->
 
 %% statem callbacks
 
--spec init(code()) -> {ok, state(), #data{}}.
+-spec init(code()) -> {ok, locked, #data{}}.
 init(Code) ->
     Data = #data{code = Code},
     {ok, locked, Data}.
 
 -spec callback_mode() -> gen_statem:callback_mode_result().
-callback_mode() -> state_functions.
+callback_mode() ->
+    state_functions.
 
 -spec handle_common({call, From :: pid()}, common(), Data :: #data{}) -> ret(#data{}).
 handle_common({call, From}, code_length, Data = #data{code = Code}) ->

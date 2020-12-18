@@ -80,7 +80,7 @@ handle_info(timeout, State = #state{skill = bad}) ->
             {noreply, State, ?DELAY}
     end;
 handle_info(timeout, State = #state{}) ->
-    io:format("~s produced sound!~n",[State#state.role]),
+    io:format("~s produced sound!~n", [State#state.role]),
     {noreply, State, ?DELAY};
 handle_info(_Info, State = #state{}) ->
     {noreply, State}.
