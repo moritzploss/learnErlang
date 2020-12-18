@@ -100,6 +100,4 @@ terminate(shutdown, State = #state{}) ->
         "The manager is mad and fired the whole band! "
         "~s just got back to playing in the subway~n",
         [State#state.name]
-    );
-terminate(_Reason, _State) ->
-    ok.
+    ).

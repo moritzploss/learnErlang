@@ -50,7 +50,8 @@ callback_mode() ->
 handle_common({call, From}, code_length, Data = #data{code = Code}) ->
     {keep_state, Data, [{reply, From, length(Code)}]}.
 
-terminate(_Reason, _State, _Data) -> ok.
+terminate(_Reason, _State, _Data)
+    -> ok.
 
 %% internal statem callbacks
 
