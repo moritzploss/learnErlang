@@ -1,6 +1,13 @@
 -module(ev_server).
 
--export([start/0, start_link/0, stop/1, add_event/3, subscribe/1]).
+-export([
+    start/0,
+    start_link/0,
+    stop/1,
+    add_event/3,
+    subscribe/1
+]).
+
 -export([init/1]).
 
 -type name() :: string().

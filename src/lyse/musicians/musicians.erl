@@ -30,7 +30,7 @@
 
 % external API
 
--spec start_link(Role :: role(), Skill :: skill()) -> {ok, pid()}.
+-spec start_link(role(), skill()) -> {ok, pid()}.
 start_link(Role, Skill) ->
     gen_server:start_link({local, Role}, ?MODULE, {Role, Skill}, []).
 
@@ -46,7 +46,7 @@ pick_play_time() ->
     rand:seed(exs64),
     rand:uniform(3000).
 
--spec init({Role :: role(), Skill :: skill()}) -> {ok, #state{}, pos_integer()}.
+-spec init({role(), skill()}) -> {ok, #state{}, pos_integer()}.
 init({Role, Skill}) ->
     process_flag(trap_exit, true),
     Name = pick_name(),
