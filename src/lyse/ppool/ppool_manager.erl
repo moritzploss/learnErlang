@@ -13,8 +13,6 @@
 
 -define(Pool, ppool).
 
--type childId() :: atom() | string().
-
 % external API
 
 -spec start_link() -> supervisor:startlink_ret().
@@ -30,7 +28,7 @@ stop() ->
             true
     end.
 
--spec start_pool(childId(), pos_integer(), types:mfargs()) -> supervisor:startchild_ret().
+-spec start_pool(ppool:childId(), pos_integer(), types:mfargs()) -> supervisor:startchild_ret().
 start_pool(ChildId, MaxChildren, ChildMFA) ->
     ChildSpec = #{
         id => ChildId,
@@ -42,7 +40,7 @@ start_pool(ChildId, MaxChildren, ChildMFA) ->
     },
     supervisor:start_child(?Pool, ChildSpec).
 
--spec stop_pool(childId()) -> ok | {error, term()}.
+-spec stop_pool(ppool:childId()) -> ok | {error, term()}.
 stop_pool(ChildId) ->
     supervisor:terminate_child(?Pool, ChildId),
     supervisor:delete_child(?Pool, ChildId).
