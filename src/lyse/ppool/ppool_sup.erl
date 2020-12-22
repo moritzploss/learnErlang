@@ -11,7 +11,7 @@
 
 % public API
 
--spec start_link(ppool:childId(), pos_integer(), types:mfargs()) -> supervisor:startlink_ret().
+-spec start_link(ppool:child_id(), pos_integer(), types:mfargs()) -> supervisor:startlink_ret().
 start_link(ChildId, MaxChildren, ChildMFA) ->
     supervisor:start_link(?MODULE, {ChildId, MaxChildren, ChildMFA}).
 
