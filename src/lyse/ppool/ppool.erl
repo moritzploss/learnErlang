@@ -15,16 +15,16 @@
 ]).
 
 start_link() ->
-    ppool_supersup:start_link().
+    ppool_manager:start_link().
 
 stop() ->
-    ppool_supersup:stop().
+    ppool_manager:stop().
 
 start_pool(Name, Limit, {M, F, A}) ->
-    ppool_supersup:start_pool(Name, Limit, {M, F, A}).
+    ppool_manager:start_pool(Name, Limit, {M, F, A}).
 
 stop_pool(Name) ->
-    ppool_supersup:stop_pool(Name).
+    ppool_manager:stop_pool(Name).
 
 run(Name, Args) ->
     ppool_serv:run(Name, Args).

@@ -4,7 +4,6 @@
 
 -export([
     start_link/0,
-    stop/0,
     start_pool/3,
     stop_pool/1
 ]).
@@ -19,15 +18,6 @@
 -spec start_link() -> supervisor:startlink_ret().
 start_link() ->
     supervisor:start_link({local, ?Pool}, ?MODULE, []).
-
--spec stop() -> true.
-stop() ->
-    case whereis(?Pool) of
-        Id when is_pid(Id) ->
-            exit(Id, kill);
-        _ ->
-            true
-    end.
 
 -spec start_pool(ppool:child_id(), pos_integer(), types:mfargs()) -> supervisor:startchild_ret().
 start_pool(ChildId, MaxChildren, ChildMFA) ->
